@@ -97,11 +97,9 @@ const __dirname = path.resolve();
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  origin: "*"
-}));
+app.use(cors());
 
-// api endpointsc
+// api endpoints
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);

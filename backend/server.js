@@ -180,20 +180,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ✅ CORS setup
-const allowedOrigins = [
-  "https://doctorallotment.onrender.com" // Both frontend & admin served from here
-];
+const corsOption = {
+  origin:"https://doctorallotment.onrender.com",
+  // origin: "http://localhost:5173",
+  credentials: true,
+  method: "GET POST DELETE PUT",
+};
 
-app.use(cors({
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-  credentials: true
-}));
+// Middleware
+app.use(cors(corsOption));
 
 // ✅ API Routes
 app.use("/api/admin", adminRouter);

@@ -11,7 +11,7 @@ const AppContextProvider = (props) => {
   // const currencySymbol = "$";
   // const backendUrl = "http://localhost:4000";
   // const backendUrl = import.meta.env.VITE_BACKEND_URL;
-  const backendUrl = "https://doctorallotment.onrender.com/";
+  const backendUrl = "https://doctorallotment.onrender.com";
   const currencySymbol = import.meta.env.CURRENCY;
 
   const [userData, setUserData] = useState(false);

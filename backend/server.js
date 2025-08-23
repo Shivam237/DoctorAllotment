@@ -77,6 +77,87 @@
 
 
 
+// import express from "express";
+// import cors from "cors";
+// import "dotenv/config";
+// import connectDB from "./config/mongodb.js";
+// import connectCloudinary from "./config/cloudinary.js";
+// import adminRouter from "./routes/adminRoute.js";
+// import doctorRouter from "./routes/doctorRoute.js";
+// import userRouter from "./routes/userRoute.js";
+// import path from "path";
+
+// const app = express();
+// const port = process.env.PORT || 4000;
+// connectDB();
+// connectCloudinary();
+
+// const __dirname = path.resolve();
+
+// // middlewares
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(cors());
+
+// // api endpoints
+// app.use("/api/admin", adminRouter);
+// app.use("/api/doctor", doctorRouter);
+// app.use("/api/user", userRouter);
+
+// // ✅ Testing route (shifted)
+// app.get("/api", (req, res) => {
+//   res.send("api working");
+// });
+
+// // ✅ Serve frontend
+// app.use(express.static(path.join(__dirname, "frontend/dist")));
+
+// // ✅ Serve admin (mounted on /admin)
+// app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
+
+// // For frontend (SPA routing support)
+// app.get("*", (req, res, next) => {
+//   if (req.path.startsWith("/admin")) {
+//     return next(); // admin ke liye skip kar do
+//   }
+//   res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
+// });
+
+// // For admin (SPA routing support)
+// app.get("/admin/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "admin/dist", "index.html"));
+// });
+
+// app.listen(port, () => {
+//   console.log("Server started on port", port);
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
@@ -94,40 +175,53 @@ connectCloudinary();
 
 const __dirname = path.resolve();
 
-// middlewares
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
-// api endpoints
+// ✅ CORS setup
+const allowedOrigins = [
+  "https://doctorallotment.onrender.com" // Both frontend & admin served from here
+];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
+
+// ✅ API Routes
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
 
-// ✅ Testing route (shifted)
+// ✅ Test route
 app.get("/api", (req, res) => {
-  res.send("api working");
+  res.send("API is working");
 });
 
 // ✅ Serve frontend
 app.use(express.static(path.join(__dirname, "frontend/dist")));
 
-// ✅ Serve admin (mounted on /admin)
+// ✅ Serve admin
 app.use("/admin", express.static(path.join(__dirname, "admin/dist")));
 
-// For frontend (SPA routing support)
+// ✅ Frontend SPA routing
 app.get("*", (req, res, next) => {
-  if (req.path.startsWith("/admin")) {
-    return next(); // admin ke liye skip kar do
-  }
+  if (req.path.startsWith("/admin")) return next();
   res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
 });
 
-// For admin (SPA routing support)
+// ✅ Admin SPA routing
 app.get("/admin/*", (req, res) => {
   res.sendFile(path.join(__dirname, "admin/dist", "index.html"));
 });
 
 app.listen(port, () => {
-  console.log("Server started on port", port);
+  console.log(`Server started on port ${port}`);
 });
